@@ -16,7 +16,7 @@ def get_all_videos():
     params = {
         'part': 'snippet',
         'channelId': channel_id,
-        'maxResults': 50,
+        'maxResults': 100,
         'key': api_key
     }
     
@@ -27,7 +27,8 @@ def get_all_videos():
         if item['id']['kind'] == 'youtube#video':
             video = {
                 'id': item['id']['videoId'],
-                'titulo': item['snippet']['title']
+                'titulo': item['snippet']['title'],
+                'description': item['snippet']['description']
             }
             videos.append(video)
     
