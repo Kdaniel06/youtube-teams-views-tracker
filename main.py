@@ -13,7 +13,7 @@ class Matchday(BaseModel):
 
 # TODO it works but has to be tested when YT update the videos 
 # * GET VIEWS BY MATCHDAY (including announcements, statistics, and matches)
-@app.post("/matchday-views/")
+@app.post("/api/matchday-views/")
 def matchday_views(request: Matchday):
     matchday_num = request.matchday
     videos = get_all_videos()
@@ -37,7 +37,7 @@ def matchday_views(request: Matchday):
 
 # TODO it works but has to be tested when YT update the videos
 # * GET MOST VIEWED matchday
-@app.get("/most-viewed-matchday/")
+@app.get("/api/most-viewed-matchday/")
 def most_viewed_matchday():
     videos = get_all_videos()
 
@@ -62,7 +62,7 @@ def most_viewed_matchday():
 
 # TODO it works but has to be tested when YT update the videos
 # * GET MOST VIEWED MATCH
-@app.get("/most-viewed-match/")
+@app.get("/api/most-viewed-match/")
 def most_viewed_match():
     videos = get_all_videos()
     max_views = 0
@@ -80,7 +80,7 @@ def most_viewed_match():
     return most_viewed_match
 
 # * GET SINGLE TEAM VIEWS
-@app.post("/single-team-views/")
+@app.post("/api/single-team-views/")
 def single_team_views(request: Team):
     team_name = request.name
     videos = get_team_views_and_videos(team_name)
@@ -95,7 +95,7 @@ def single_team_views(request: Team):
     }
 
 # * GET MANY TEAMS VIEWS
-@app.post("/teams-views/")
+@app.post("/api/teams-views/")
 def teams_views(teams: List[Team]):
     teams_views_list = []
     for team in teams:
@@ -104,10 +104,32 @@ def teams_views(teams: List[Team]):
         teams_views_list.append({"team": team_name, "total_views": views}) 
     return teams_views_list
 
-# TODO it works but has to be tested when YT update the videos
 # * GET FUTCREW 1st Edition TEAMS
-@app.get("/first-edition-teams/")
-def get_first_ediction_teams():
+@app.get("/api/first-edition-teams/")
+def get_first_edition_teams():
+
+    teams = [
+        {"name": "Imperial crew"},
+        {"name": "San Francisco Academia"},
+        {"name": "Invu FC"},
+        {"name": "Cedros Crew"},
+        {"name": "Aston Rios PC"},
+        {"name": "Barcola"},
+        {"name": "Wolf"},
+        {"name": "Vodka Juniors"},
+        {"name": "CD Monte S"},
+        {"name": "La Union FC"}
+    ]
+
+
+    return teams
+
+
+# TODO Implements the GET TEAMS FOR EDITION in future editions
+'''
+# * GET FUTCREW 1st Edition TEAMS
+@app.get("/teams-per-edition/")
+def get_first_ediction_teams(edition: int):
     videos = get_all_videos()
 
     teams = []
@@ -116,9 +138,11 @@ def get_first_ediction_teams():
     for video in videos:
         title = video['titulo'].lower()
         description = video['description']
-        if "Video introductorio de torneo FUTCREW" in title:
+        if f"video introductorio de torneo futcrew {edition}" in title:
             for line in description.split('\n'):
+                print(f"Desc line: {line}")
                 if line.startswith('-'):
                     teams.append({"name": line.strip().replace('- ', '')})
 
     return teams
+'''
